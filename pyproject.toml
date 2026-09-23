@@ -1,0 +1,20 @@
+[project]
+name = "misty-pos"
+version = "1.0.0"
+description = "Offline-first POS for a pop-up bar: SQLite single-writer, hot-standby failover over a phone hotspot"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# PowerShell スクリプトを文字列で埋め込んでいるため
+"misty/network.py" = ["E501"]

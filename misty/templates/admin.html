@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}管理 - Misty POS{% endblock %}
+{% block content %}
+<div class="banner warn" id="error-banner" role="alert"></div>
+<div class="banner ok" id="info-banner"></div>
+
+<div class="stat-row">
+  <div class="stat-tile"><div class="label">本日の売上</div><div class="value" id="stat-total">¥0</div></div>
+  <div class="stat-tile"><div class="label">会計件数</div><div class="value" id="stat-count">0</div></div>
+</div>
+
+<div class="section">
+  <h2>メニュー（Googleスプレッドシートから読み込む）</h2>
+  <div class="form-row">
+    <input type="text" id="sheet-url" placeholder="スプレッドシートのURL（共有: リンクを知っている全員が閲覧可）" class="grow">
+    <button class="secondary" id="import-btn">読み込む</button>
+  </div>
+  <p class="soft small">
+    新しい商品は追加、既存商品は名前で照合して価格・カテゴリーを上書きします。すでに会計が始まった商品の在庫数は上書きしません。
+  </p>
+</div>
+
+<div class="section">
+  <h2>メニュー一覧</h2>
+  <div class="form-row">
+    <input type="text" id="new-name" placeholder="商品名">
+    <input type="text" id="new-category" placeholder="カテゴリー">
+    <input type="number" id="new-price" placeholder="価格" min="0" inputmode="numeric">
+    <input type="number" id="new-stock" placeholder="在庫数" min="0" inputmode="numeric">
+    <button class="secondary" id="add-item-btn">追加</button>
+  </div>
+  <table class="data-table">
+    <thead><tr><th>商品名</th><th>カテゴリー</th><th>価格</th><th>在庫</th><th>販売</th></tr></thead>
+    <tbody id="menu-tbody"></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>人気ランキング・エクスポート</h2>
+  <table class="data-table">
+    <thead><tr><th>商品名</th><th>販売数</th><th>売上</th></tr></thead>
+    <tbody id="ranking-tbody"></tbody>
+  </table>
+  <div class="form-row spaced">
+    <a class="secondary" href="/api/export/orders.csv">注文明細CSV</a>
+    <a class="secondary" href="/api/export/summary.csv">売上サマリーCSV</a>
+    <a class="secondary" href="/api/export/log.csv">操作ログCSV</a>
+  </div>
+  <p class="soft small">
+    これらのCSVを、ネットに繋がったタイミングで部の共有ドライブにアップロードしてください。
+  </p>
+</div>
+
+<div class="section">
+  <h2>注文履歴・取消／訂正</h2>
+  <table class="data-table">
+    <thead><tr><th>ID</th><th>整理番号</th><th>状態</th><th>内容</th><th>金額</th><th>時刻</th><th></th></tr></thead>
+    <tbody id="orders-tbody"></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>操作ログ（直近200件）</h2>
+  <table class="data-table">
+    <thead><tr><th>時刻</th><th>端末</th><th>操作</th><th>詳細</th></tr></thead>
+    <tbody id="log-tbody"></tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>
+{% endblock %}

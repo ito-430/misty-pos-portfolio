@@ -1,0 +1,236 @@
+:root {
+  --mist-50: #eef1f2;
+  --ink-900: #14181c;
+  --ink-700: #2a3136;
+  --ink-500: #525d63;
+  --smoke-300: #c7ced2;
+  --smoke-200: #dde2e4;
+  --brass-500: #a8783a;
+  --brass-600: #8f6329;
+  --ok-500: #3f7d69;
+  --warn-500: #c2792e;
+  --crit-500: #b0473e;
+
+  --bg: var(--mist-50);
+  --surface: #ffffff;
+  --text: var(--ink-900);
+  --text-soft: var(--ink-500);
+  --border: var(--smoke-300);
+  --accent: var(--brass-500);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+           env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+}
+img { max-width: 100%; }
+button { font-family: inherit; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 10px 16px;
+  background: var(--ink-900); color: #fff;
+}
+.topbar .brand { font-weight: 700; letter-spacing: .02em; }
+.topbar .role-badge {
+  font-size: 12px; padding: 3px 9px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.35); color: #fff; opacity: .85;
+}
+.topbar .role-badge.standby { border-color: var(--warn-500); color: var(--warn-500); background: rgba(194,121,46,.15); }
+.topbar nav { display: flex; gap: 6px; font-size: 13px; }
+.topbar nav a { color: #fff; opacity: .75; text-decoration: none; padding: 6px 8px; border-radius: 6px; }
+.topbar nav a:hover, .topbar nav a.active { opacity: 1; background: rgba(255,255,255,.12); }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 16px; }
+
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.stat-tile {
+  flex: 1 1 140px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px;
+}
+.stat-tile .label { font-size: 12px; color: var(--text-soft); }
+.stat-tile .value { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.banner {
+  display: none; padding: 10px 16px; border-radius: 8px; margin-bottom: 14px;
+  font-size: 14px; border: 1px solid var(--border);
+}
+.banner.show { display: block; }
+.banner.ok { background: color-mix(in srgb, var(--ok-500) 12%, transparent); border-color: var(--ok-500); color: var(--ok-500); }
+.banner.warn { background: color-mix(in srgb, var(--warn-500) 12%, transparent); border-color: var(--warn-500); color: var(--warn-500); }
+.banner.crit { background: color-mix(in srgb, var(--crit-500) 12%, transparent); border-color: var(--crit-500); color: var(--crit-500); }
+
+/* register: menu grid + cart */
+.pos-layout { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 820px) {
+  .pos-layout { grid-template-columns: 1fr 340px; align-items: start; }
+}
+.menu-groups { display: flex; flex-direction: column; gap: 16px; }
+.menu-group {
+  border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+  background: rgba(255,255,255,.5);
+}
+.menu-group h3 {
+  margin: 0 0 10px; font-size: 13px; color: var(--text-soft);
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.menu-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.menu-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; text-align: left; cursor: pointer; min-height: 92px;
+  display: flex; flex-direction: column; gap: 4px; justify-content: space-between;
+}
+.menu-card:active { transform: scale(.98); }
+.menu-card[disabled] { opacity: .4; cursor: not-allowed; }
+.menu-card .name { font-weight: 700; font-size: 15px; }
+.menu-card .price { font-variant-numeric: tabular-nums; color: var(--text); }
+.menu-card .stock { font-size: 12px; color: var(--text-soft); }
+.menu-card .stock.low { color: var(--warn-500); font-weight: 700; }
+.menu-card .stock.zero { color: var(--crit-500); font-weight: 700; }
+
+.cart-panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; position: sticky; top: 66px;
+}
+.cart-items { display: flex; flex-direction: column; gap: 8px; max-height: 40vh; overflow-y: auto; margin: 10px 0; }
+.cart-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; }
+.cart-row .qty-btns button {
+  width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--surface); font-size: 15px; line-height: 1;
+}
+.seat-picker { margin: 10px 0; }
+.seat-picker-label { font-size: 12px; color: var(--text-soft); margin-bottom: 6px; }
+.seat-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+}
+.seat-btn {
+  aspect-ratio: 1 / 1; border-radius: 50%; border: none; cursor: pointer;
+  color: #fff; font-weight: 700; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+  font-variant-numeric: tabular-nums;
+  /* 物理的な番号札の書体に寄せてセリフ体にし、レジ担当が札と画面を一目で照合できるようにする */
+  font-family: Georgia, "Hiragino Mincho ProN", serif;
+  transition: transform .08s ease, box-shadow .08s ease;
+  padding: 0;
+}
+.seat-btn.group-a { background: #0A0603; }
+.seat-btn.group-b { background: #970F2E; }
+.seat-btn:active:not(:disabled) { transform: scale(.92); }
+.seat-btn.selected { box-shadow: 0 0 0 3px var(--accent); }
+.seat-btn.occupied { opacity: .35; cursor: not-allowed; }
+.total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: 700; margin: 10px 0; }
+
+button.primary {
+  width: 100%; padding: 14px; font-size: 17px; font-weight: 700;
+  background: var(--accent); color: #fff; border: none; border-radius: 10px; cursor: pointer;
+}
+button.primary:disabled { background: var(--smoke-300); color: var(--text-soft); cursor: not-allowed; }
+button.secondary {
+  padding: 8px 12px; font-size: 13px; background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+}
+button.danger { color: var(--crit-500); border-color: color-mix(in srgb, var(--crit-500) 45%, var(--border)); }
+
+.undo-toast {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  background: var(--ink-900); color: #fff; padding: 12px 16px; border-radius: 10px;
+  display: flex; align-items: center; gap: 14px; font-size: 14px; z-index: 50;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.undo-toast button { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 6px 12px; }
+
+/* register / bartender: right-side panels (cart, chat) */
+.right-col { display: flex; flex-direction: column; gap: 16px; }
+
+.chat-panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; display: flex; flex-direction: column; gap: 8px;
+  height: 320px; position: sticky; top: 66px;
+}
+.chat-panel h2 { margin: 0; font-size: 15px; }
+.chat-messages {
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+  background: var(--mist-50); border-radius: 8px; padding: 8px;
+}
+.chat-msg { max-width: 88%; }
+.chat-msg .chat-meta { font-size: 11px; color: var(--text-soft); margin-bottom: 2px; }
+.chat-msg .chat-text {
+  display: inline-block; font-size: 13px; word-break: break-word;
+  background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px;
+}
+.chat-msg.mine { align-self: flex-end; text-align: right; }
+.chat-msg.mine .chat-text { background: var(--accent); color: #fff; border-color: var(--accent); }
+.chat-input-row { display: flex; gap: 6px; }
+.chat-input-row input {
+  flex: 1; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;
+}
+.chat-input-row button {
+  padding: 8px 14px; background: var(--accent); color: #fff; border: none;
+  border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px;
+}
+
+/* bartender board */
+.task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.task-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.task-card .seat { font-size: 28px; font-weight: 800; color: var(--accent); }
+.task-card ul { margin: 0; padding-left: 1.1em; font-size: 15px; }
+.task-card button.complete {
+  margin-top: auto; padding: 12px; font-size: 15px; font-weight: 700;
+  background: var(--ok-500); color: #fff; border: none; border-radius: 8px; cursor: pointer;
+}
+.empty-state { color: var(--text-soft); padding: 40px 0; text-align: center; }
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--surface); }
+table.data-table th, table.data-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+table.data-table thead th { color: var(--text-soft); font-weight: 500; font-size: 12px; text-transform: uppercase; }
+
+.section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.section h2 { margin-top: 0; font-size: 16px; }
+.form-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.form-row input, .form-row select {
+  padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;
+}
+
+.connect-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 760px) { .connect-grid { grid-template-columns: repeat(3, 1fr); } }
+.connect-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+.connect-card img { width: 100%; max-width: 220px; margin: 10px auto; }
+.connect-url { font-family: monospace; font-size: 13px; word-break: break-all; background: var(--mist-50); padding: 8px; border-radius: 6px; }
+
+/* utilities */
+[hidden] { display: none !important; }
+.soft { color: var(--text-soft); }
+.small { font-size: 13px; }
+.mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; word-break: break-all; }
+.grow { flex: 1; min-width: 240px; }
+.spaced { margin-top: 12px; }
+.page-title { margin-top: 0; }
+.panel-title { margin: 0 0 6px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.page-head h1 { margin: 0; }
+.done-panel { margin-top: 20px; }
+.num-input { width: 84px; }
+.reason-input { width: 120px; }
+.cart-row .qty { margin: 0 6px; font-variant-numeric: tabular-nums; }
+
+/* 新着の注文カードを数秒だけ強調し、バーテンが視界の端で気付けるようにする */
+.task-card.fresh { animation: fresh-pulse 1.2s ease-out 3; border-color: var(--accent); }
+@keyframes fresh-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); }
+  100% { box-shadow: 0 0 0 12px transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .task-card.fresh { animation: none; } }

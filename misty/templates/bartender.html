@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}バーテン - Misty POS{% endblock %}
+{% block content %}
+<div id="bartender-root" data-undo-sec="{{ settings.undo_complete_sec }}"></div>
+<div class="banner warn" id="error-banner" role="alert"></div>
+<div class="page-head">
+  <h1>タスク表</h1>
+  <button class="secondary" id="toggle-done-btn">完了済み一覧を表示</button>
+</div>
+
+<div class="pos-layout">
+  <div>
+    <div id="task-grid" class="task-grid"></div>
+    <div id="empty-state" class="empty-state" hidden>準備中の注文はありません</div>
+
+    <div id="done-panel" class="done-panel" hidden>
+      <h2>完了済み（直近50件）</h2>
+      <table class="data-table">
+        <thead><tr><th>整理番号</th><th>内容</th><th>完了時刻</th><th></th></tr></thead>
+        <tbody id="done-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="right-col">
+    {% include "_chat.html" %}
+  </div>
+</div>
+
+<div id="undo-toast" class="undo-toast" hidden>
+  <span id="undo-text"></span>
+  <button id="undo-btn">元に戻す</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/bartender.js') }}" defer></script>
+{% endblock %}

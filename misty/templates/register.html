@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}レジ - Misty POS{% endblock %}
+{% block content %}
+<div id="register-root" data-undo-sec="{{ settings.undo_checkout_sec }}"></div>
+<div class="banner crit {{ 'show' if not state.is_active }}" id="standby-banner">
+  この端末はスタンバイ中です。会計はできません。
+</div>
+<div class="banner warn" id="error-banner" role="alert"></div>
+
+<div class="stat-row">
+  <div class="stat-tile"><div class="label">本日の売上</div><div class="value" id="stat-total">¥0</div></div>
+  <div class="stat-tile"><div class="label">会計件数</div><div class="value" id="stat-count">0</div></div>
+</div>
+
+<div class="pos-layout">
+  <div>
+    <div class="menu-groups" id="menu-groups"></div>
+  </div>
+  <div class="right-col">
+    <div class="cart-panel">
+      <h2 class="panel-title">カート</h2>
+      <div class="seat-picker">
+        <div class="seat-picker-label">整理番号</div>
+        <div class="seat-grid" id="seat-grid" data-min="{{ settings.seat_no_min }}" data-max="{{ settings.seat_no_max }}"></div>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="total-row"><span>合計</span><span id="cart-total">¥0</span></div>
+      <button class="primary" id="checkout-btn" disabled>会計する</button>
+    </div>
+    {% include "_chat.html" %}
+  </div>
+</div>
+
+<div id="undo-toast" class="undo-toast" hidden>
+  <span id="undo-text"></span>
+  <button id="undo-btn">取り消す</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}" defer></script>
+{% endblock %}

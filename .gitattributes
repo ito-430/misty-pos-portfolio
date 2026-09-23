@@ -1,0 +1,2 @@
+# cmd.exe は LF 改行の .bat を誤解釈することがあるため、常に CRLF でチェックアウトする
+*.bat text eol=crlf

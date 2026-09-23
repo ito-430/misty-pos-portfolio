@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}接続 - Misty POS{% endblock %}
+{% block content %}
+<h1 class="page-title">端末を接続する</h1>
+<p class="soft">
+  各端末のカメラで QR を読み取るか、下の URL をブラウザに入力して、この端末（{{ state.device_name }}）に接続します。
+</p>
+{% if viewed_via != base_url %}
+<div class="banner warn show">
+  今このページは <code>{{ viewed_via }}</code> で開いていますが、他の端末からは
+  <strong>{{ base_url }}</strong> を使ってください（QR はこのアドレスで作っています）。
+</div>
+{% endif %}
+
+<div class="connect-grid">
+  {% for key, label in [("register", "レジ"), ("bartender", "バーテン"), ("admin", "管理")] %}
+  <div class="connect-card">
+    <h2>{{ label }}</h2>
+    <img src="{{ qr_codes[key] }}" alt="{{ label }}画面へのQRコード">
+    <div class="connect-url">{{ targets[key] }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if alternatives %}
+<div class="section">
+  <h2>QR で繋がらないとき</h2>
+  <p class="soft small">
+    この端末は複数のネットワークに接続しています。上のアドレスで繋がらない場合は、
+    次のアドレスを順に試してください（ホットスポット側のアドレスが優先して選ばれています）。
+  </p>
+  <ul class="mono">
+    {% for url in alternatives %}<li>{{ url }}/register</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}
